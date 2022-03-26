@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import * as PropTypes from "prop-types";
+import InputMask from "react-input-mask";
 
 const memory = {};
 
-function Svg({ file, params }) {
+export function Svg({ file, params }) {
   const [_file, setFile] = useState(file);
 
   const [svg, setSVG] = useState(null);
@@ -31,7 +32,7 @@ function Svg({ file, params }) {
     if (!svg) return;
     let _svg = svg;
     for (const key in params) {
-      _svg = _svg.replace("{" + key + "}", params[key]);
+      _svg = _svg.replace("{" + key.toUpperCase() + "}", params[key]);
     }
     setSVGRender(_svg);
   }, [params, svg]);
@@ -46,19 +47,28 @@ Svg.propTypes = {
   params: PropTypes.object,
 };
 
-function createInput({ label, value }) {
+export function createInput({ label, value, mask, maxLength }) {
   const [_value, setValue] = useState(value);
+  const onChange = ({ target: { value } }) => setValue(value);
+  if (mask) {
+    return [
+      <div key={label}>
+        <label>{label}</label>
+        <InputMask mask={mask} value={_value} onChange={onChange} />
+      </div>,
+      _value,
+    ];
+  }
   return [
     <div key={label}>
       <label>{label}</label>
       <input
         type={"text"}
         value={_value}
-        onChange={({ target }) => setValue(target.value)}
+        onChange={onChange}
+        maxLength={maxLength || Infinity}
       />
     </div>,
     _value,
   ];
 }
-
-export default { Svg, createInput };
