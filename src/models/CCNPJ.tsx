@@ -5,40 +5,42 @@ import Model1 from "./extends/CCNPJ_1.svg";
 import { Svg, createInput } from "./Components.tsx";
 
 export default function CCNPJ() {
-  const [InputCNPJ, cnpj] = createInput({
+  const [InputCNPJ, cnpj, fontCnpj] = createInput({
     label: "CNPJ: ",
     value: "00.000.000/0000-00",
     mask: "99.999.999/9999-99",
+    font: "Courier New",
   });
-  const [InputNome, nome] = createInput({
+  const [InputNome, nome, fontNome] = createInput({
     label: "Nome - Linha 1: ",
     value: "Razão social da empresa",
-    maxLength: 24,
+    font: "Courier New",
   });
-  const [InputNome2, nome2] = createInput({
+  const [InputNome2, nome2, fontNome2] = createInput({
     label: "Nome - Linha 2: ",
     value: "",
-    maxLength: 24,
+    font: "Courier New",
   });
-  const [InputRua, rua] = createInput({
+  const [InputRua, rua, fontRua] = createInput({
     label: "Rua: ",
     value: "Rua Ernestro Alves, 123",
-    maxLength: 24,
+    font: "Courier New",
   });
-  const [InputCEIP, ciep] = createInput({
+  const [InputCEIP, ciep, fontCiep] = createInput({
     label: "Cidade e Estado: ",
     value: "IJUÍ - RS",
-    maxLength: 24,
+    font: "Courier New",
   });
-  const [InputCEP, cep] = createInput({
+  const [InputCEP, cep, fontCep] = createInput({
     label: "CEP: ",
     value: "98.700-000",
     mask: "99.999-999",
+    font: "Courier New",
   });
-  const [InputIE, ie] = createInput({
+  const [InputIE, ie, fontIe] = createInput({
     label: "IE: ",
     value: "123456789",
-    maxLength: 19,
+    font: "Courier New",
   });
 
   const MODELS = {
@@ -82,13 +84,34 @@ export default function CCNPJ() {
       <Svg
         file={selectedModel.model}
         params={{
-          cnpj,
-          nome,
-          nome2,
-          rua,
-          ciep,
-          cep,
-          ie,
+          cnpj: {
+            value: cnpj,
+            font: fontCnpj,
+          },
+          nome: {
+            value: nome,
+            font: fontNome,
+          },
+          nome2: {
+            value: nome2,
+            font: fontNome2,
+          },
+          rua: {
+            value: rua,
+            font: fontRua,
+          },
+          ciep: {
+            value: ciep,
+            font: fontCiep,
+          },
+          cep: {
+            value: cep,
+            font: fontCep,
+          },
+          ie: {
+            value: ie,
+            font: fontIe,
+          },
         }}
       />
     </>

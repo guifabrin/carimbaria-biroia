@@ -6,7 +6,7 @@ viewBox="0 0 6026 3806"
  xmlns:xlink="http://www.w3.org/1999/xlink">
  <defs>
   <font id="FontID0" horiz-adv-x="600" font-variant="normal" style="fill-rule:nonzero" font-style="normal" font-weight="700">
-	<font-face 
+	<font-face
 		font-family="Courier New">
 	</font-face>
    <missing-glyph><path d="M0 0z"/></missing-glyph>
@@ -52,11 +52,11 @@ viewBox="0 0 6026 3806"
     <line class="fil0 str0" x1="5912" y1="25" x2="5523" y2= "25" />
    </g>
   </g>
-  <text x="49.5%" y="541" text-anchor="middle"  class="fil1 fnt1">{CNPJ}</text>
-  <text x="49.5%" y="2976" text-anchor="middle"  class="fil1 fnt0">CEP {CEP}</text>
-  <text x="49.5%" y="1278" text-anchor="middle"  class="fil1 fnt0">{NOME}</text>
-  <text x="49.5%" y="1800" text-anchor="middle"  class="fil1 fnt0">{NOME2}</text>
-  <text x="49.5%" y="2372" text-anchor="middle"  class="fil1 fnt0">{RUA}</text>
-  <text x="49.5%" y="3591" text-anchor="middle"  class="fil1 fnt0">{CIEP}</text>
+  <text style="font-family: {fontCNPJ}" x="49.5%" y="541"  text-anchor="middle" class="fil1 fnt1">{CNPJ}</text>
+  <text style="font-family: {fontCEP}" x="49.5%" y="2976" text-anchor="middle" class="fil1 fnt0">CEP {CEP}</text>
+  <text style="font-family: {fontNOME}" x="49.5%" y="1278" text-anchor="middle" class="fil1 fnt0">{NOME}</text>
+  <text style="font-family: {fontNOME2}" x="49.5%" y="1800" text-anchor="middle" class="fil1 fnt0">{NOME2}</text>
+  <text style="font-family: {fontRUA}" x="49.5%" y="2372" text-anchor="middle" class="fil1 fnt0">{RUA}</text>
+  <text style="font-family: {fontCIEP}" x="49.5%" y="3591" text-anchor="middle" class="fil1 fnt0">{CIEP}</text>
  </g>
 </svg>
