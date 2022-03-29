@@ -133,7 +133,7 @@ export default function CCNPJ({ frameId, models, types, type: _type }) {
       {inputs}
       <div className={"d-flex"}>
         <div className={"img-flow"}>
-          <img src={`/models/CCNPJ_${type}.jpg`} />
+          <img src={`./models/CCNPJ_${type}.jpg`} />
         </div>
         <Svg file={models[model].model} frameId={frameId} params={params} />
       </div>
