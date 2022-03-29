@@ -1,119 +1,149 @@
-import { useEffect, useState } from "react";
-import Model0 from "./extends/CCNPJ_0.svg";
-import Model1 from "./extends/CCNPJ_1.svg";
+import { useState } from "react";
 
-import { Svg, createInput } from "./Components.tsx";
+import { Svg, Input } from "./Components.tsx";
+import * as PropTypes from "prop-types";
+import { Form } from "react-bootstrap";
 
-export default function CCNPJ() {
-  const [InputCNPJ, cnpj, fontCnpj] = createInput({
-    label: "CNPJ: ",
-    value: "00.000.000/0000-00",
-    mask: "99.999.999/9999-99",
-    font: "Courier New",
-  });
-  const [InputNome, nome, fontNome] = createInput({
-    label: "Nome - Linha 1: ",
-    value: "Razão social da empresa",
-    font: "Courier New",
-  });
-  const [InputNome2, nome2, fontNome2] = createInput({
-    label: "Nome - Linha 2: ",
-    value: "",
-    font: "Courier New",
-  });
-  const [InputRua, rua, fontRua] = createInput({
-    label: "Rua: ",
-    value: "Rua Ernestro Alves, 123",
-    font: "Courier New",
-  });
-  const [InputCEIP, ciep, fontCiep] = createInput({
-    label: "Cidade e Estado: ",
-    value: "IJUÍ - RS",
-    font: "Courier New",
-  });
-  const [InputCEP, cep, fontCep] = createInput({
-    label: "CEP: ",
-    value: "98.700-000",
-    mask: "99.999-999",
-    font: "Courier New",
-  });
-  const [InputIE, ie, fontIe] = createInput({
-    label: "IE: ",
-    value: "123456789",
-    font: "Courier New",
-  });
-
-  const MODELS = {
-    0: {
-      name: "Simples",
-      model: Model0,
-      inputs: [InputCNPJ, InputNome, InputNome2, InputRua, InputCEIP, InputCEP],
+export default function CCNPJ({ frameId, models, types, type: _type }) {
+  const [model, setModel] = useState(0);
+  const [type, setType] = useState(_type);
+  const [params, setParams] = useState({
+    cnpj: {
+      value: "00.000.000/0000-00",
+      font: "Courier New",
     },
-    1: {
-      name: "Com inscrição estadual",
-      model: Model1,
-      inputs: [InputCNPJ, InputIE, InputNome, InputRua, InputCEIP, InputCEP],
+    nome: {
+      value: "Razão social da empresa",
+      font: "Courier New",
     },
+    nome2: {
+      value: "",
+      font: "Courier New",
+    },
+    rua: {
+      value: "Rua Ernestro Alves, 123",
+      font: "Courier New",
+    },
+    ciep: {
+      value: "IJUÍ - RS",
+      font: "Courier New",
+    },
+    cep: {
+      value: "98.700-000",
+      font: "Courier New",
+    },
+    ie: {
+      value: "123456789",
+      font: "Courier New",
+    },
+  });
+  const onValueChange = (key, value) => {
+    params[key].value = value;
+    setParams({ ...params });
   };
 
-  const [model, setModel] = useState(null);
-
-  useEffect(() => {
-    if (model == null) {
-      setModel(0);
-    }
-  }, [model]);
-
-  if (model == null) return <></>;
-
-  const selectedModel = MODELS[model];
+  const onFontChange = (key, font) => {
+    params[key].font = font;
+    setParams({ ...params });
+  };
+  const [inputs] = useState([
+    <Input
+      key={"cnpj"}
+      label={"CNPJ: "}
+      {...params.cnpj}
+      onValueChange={(value) => onValueChange("cnpj", value)}
+      onFontChange={(font) => onFontChange("cnpj", font)}
+      mask={"999.999/9999-99"}
+    />,
+    <Input
+      key={"nome"}
+      label={"Nome - Linha 1"}
+      {...params.nome}
+      onValueChange={(value) => onValueChange("nome", value)}
+      onFontChange={(font) => onFontChange("nome", font)}
+    />,
+    <Input
+      key={"nome2"}
+      label={"Nome - Linha 2"}
+      {...params.nome2}
+      onValueChange={(value) => onValueChange("nome2", value)}
+      onFontChange={(font) => onFontChange("nome2", font)}
+    />,
+    <Input
+      key={"rua"}
+      label={"Rua"}
+      {...params.rua}
+      onValueChange={(value) => onValueChange("rua", value)}
+      onFontChange={(font) => onFontChange("rua", font)}
+    />,
+    <Input
+      key={"ciep"}
+      label={"Cidade e Estado: "}
+      {...params.ciep}
+      onValueChange={(value) => onValueChange("ciep", value)}
+      onFontChange={(font) => onFontChange("ciep", font)}
+    />,
+    <Input
+      key={"cep"}
+      label={"CEP: "}
+      {...params.cep}
+      onValueChange={(value) => onValueChange("cep", value)}
+      onFontChange={(font) => onFontChange("cep", font)}
+      mask={"99.999-999"}
+    />,
+    <Input
+      key={"ie"}
+      label={"IE: "}
+      {...params.ie}
+      onValueChange={(value) => onValueChange("ie", value)}
+      onFontChange={(font) => onFontChange("ie", font)}
+    />,
+  ]);
 
   return (
-    <>
-      <div>
-        <label>Modelo: </label>
-        <select value={model} onChange={({ target }) => setModel(target.value)}>
-          {Object.keys(MODELS).map((index) => (
+    <Form>
+      <Form.Group>
+        <Form.Label>Modelo: </Form.Label>
+        <Form.Select
+          value={model}
+          onChange={({ target }) => {
+            setModel(+target.value);
+          }}
+        >
+          {Object.keys(models).map((index) => (
             <option key={`option${index}`} value={index}>
-              {MODELS[index].name}
+              {models[index].name}
             </option>
           ))}
-        </select>
+        </Form.Select>
+      </Form.Group>
+      <Form.Group>
+        <Form.Label>Tipo: </Form.Label>
+        <Form.Select
+          value={type}
+          onChange={({ target }) => setType(target.value)}
+        >
+          {Object.keys(types).map((index) => (
+            <option key={`option_${index}`} value={index}>
+              {types[index]}
+            </option>
+          ))}
+        </Form.Select>
+      </Form.Group>
+      {inputs}
+      <div className={"d-flex"}>
+        <div className={"img-flow"}>
+          <img src={`/models/CCNPJ_${type}.jpg`} />
+        </div>
+        <Svg file={models[model].model} frameId={frameId} params={params} />
       </div>
-      {selectedModel.inputs}
-      <Svg
-        file={selectedModel.model}
-        params={{
-          cnpj: {
-            value: cnpj,
-            font: fontCnpj,
-          },
-          nome: {
-            value: nome,
-            font: fontNome,
-          },
-          nome2: {
-            value: nome2,
-            font: fontNome2,
-          },
-          rua: {
-            value: rua,
-            font: fontRua,
-          },
-          ciep: {
-            value: ciep,
-            font: fontCiep,
-          },
-          cep: {
-            value: cep,
-            font: fontCep,
-          },
-          ie: {
-            value: ie,
-            font: fontIe,
-          },
-        }}
-      />
-    </>
+    </Form>
   );
 }
+
+CCNPJ.propTypes = {
+  frameId: PropTypes.string,
+  models: PropTypes.any,
+  types: PropTypes.any,
+  type: PropTypes.any,
+};

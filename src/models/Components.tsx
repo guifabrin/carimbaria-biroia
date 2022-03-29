@@ -5,18 +5,13 @@ import InputMask from "react-input-mask";
 import { createPortal } from "react-dom";
 import FontPicker from "font-picker-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFont, faPrint } from "@fortawesome/free-solid-svg-icons";
+import { faFont } from "@fortawesome/free-solid-svg-icons";
+
+import { Button, Form } from "react-bootstrap";
 
 const memory = {};
 
-let lastId = 0;
-
-function newId(prefix = "id") {
-  lastId++;
-  return `${prefix}${lastId}`;
-}
-
-export function Svg({ file, params }) {
+export function Svg({ file, params, frameId }) {
   const [_file, setFile] = useState(file);
 
   const [svg, setSVG] = useState(null);
@@ -66,21 +61,30 @@ export function Svg({ file, params }) {
 
   const [contentRef, setContentRef] = useState(null);
   const mountNode = contentRef?.contentWindow?.document?.body;
-  const idFrame = newId("iframe_");
+  const onLoadFrame = () => {
+    const iframe = document.querySelector("#" + frameId);
+    iframe.contentWindow.document.body.style.margin = 0;
+    iframe.contentWindow.document.body.style.overflow = "hidden";
+    const svg = iframe.contentWindow.document.body.querySelector("svg");
+    if (svg) {
+      iframe.width = svg.width.baseVal.value + "px";
+      iframe.height = svg.height.baseVal.value + "px";
+    }
+  };
   return (
     <div>
-      <button
-        onClick={() =>
-          document.querySelector("#" + idFrame).contentWindow.print()
-        }
+      <iframe
+        ref={setContentRef}
+        id={frameId}
+        name={frameId}
+        frameBorder={0}
+        onLoad={onLoadFrame}
       >
-        <FontAwesomeIcon icon={faPrint} />
-      </button>
-      <iframe ref={setContentRef} id={idFrame} name={idFrame}>
         {mountNode &&
           createPortal(
             <>
               {fontsHTML}
+              <link href={"/print.css"} type={"text/css"} rel={"stylesheet"} />
               <div
                 className="content"
                 dangerouslySetInnerHTML={{ __html: svgRender }}
@@ -96,13 +100,38 @@ export function Svg({ file, params }) {
 Svg.propTypes = {
   file: PropTypes.string,
   params: PropTypes.object,
+  frameId: PropTypes.string,
 };
 
-export function createInput({ label, value, font, mask, maxLength }) {
+const setMounts = [];
+
+Input.propTypes = {
+  label: PropTypes.string,
+  value: PropTypes.any,
+  font: PropTypes.any,
+  mask: PropTypes.any,
+  maxLength: PropTypes.any,
+  onValueChange: PropTypes.any,
+  onFontChange: PropTypes.any,
+};
+
+export function Input({
+  label,
+  value,
+  font,
+  mask,
+  maxLength,
+  onValueChange,
+  onFontChange,
+}) {
   const [_value, setValue] = useState(value);
   const [mount, setMount] = useState(false);
+  setMounts.push(setMount);
   const [_fontFamily, setFont] = useState(font || "Arial");
-  const onChange = ({ target: { value } }) => setValue(value);
+  const onChange = ({ target: { value } }) => {
+    setValue(value);
+    onValueChange(value);
+  };
   const fontSelector = (
     <>
       {mount && (
@@ -111,40 +140,59 @@ export function createInput({ label, value, font, mask, maxLength }) {
           activeFontFamily={_fontFamily}
           onChange={(nextFont) => {
             setFont(nextFont.family);
+            onFontChange(nextFont.family);
             setMount(false);
           }}
         />
       )}
       {!mount && (
-        <button onClick={() => setMount(!mount)}>
+        <Button
+          onClick={() => {
+            for (const setter of setMounts) {
+              if (setter) {
+                try {
+                  setter(false);
+                } catch (e) {
+                  // ignore
+                }
+              }
+            }
+            setMount(true);
+          }}
+        >
           <FontAwesomeIcon icon={faFont} />
-        </button>
+        </Button>
       )}
     </>
   );
   if (mask) {
-    return [
-      <div key={label}>
-        <label>{label}</label>
-        <InputMask mask={mask} value={_value} onChange={onChange} />
-        {fontSelector}
-      </div>,
-      _value,
-      _fontFamily,
-    ];
+    return (
+      <Form.Group key={label}>
+        <Form.Label>{label}</Form.Label>
+        <div className="d-flex">
+          <InputMask
+            mask={mask}
+            value={_value}
+            onChange={onChange}
+            class={"form-control"}
+          />
+          {fontSelector}
+        </div>
+      </Form.Group>
+    );
   }
-  return [
-    <div key={label}>
-      <label>{label}</label>
-      <input
-        type={"text"}
-        value={_value}
-        onChange={onChange}
-        maxLength={maxLength || Infinity}
-      />
-      {fontSelector}
-    </div>,
-    _value,
-    _fontFamily,
-  ];
+  return (
+    <Form.Group key={label}>
+      <Form.Label>{label}</Form.Label>
+      <div className="d-flex">
+        <Form.Control
+          type={"text"}
+          value={_value}
+          onChange={onChange}
+          maxLength={maxLength || Infinity}
+        />
+        {fontSelector}
+      </div>
+    </Form.Group>
+  );
 }

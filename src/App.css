@@ -28,11 +28,47 @@
   color: #61dafb;
 }
 
+label{
+  margin-top: 5px;
+  margin-bottom: 0 !important
+}
+iframe{
+  display: block;
+  margin: 20px auto auto auto
+}
+
+img{
+  max-width: 150px;
+  max-height: 150px;
+}
+
+.img-flow{
+  width: 150px;
+  height: 150px;
+  margin: 20px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media print {
+  body.negative {
+    background-color: black !important;
+    -webkit-print-color-adjust: exact;
+  }
+  iframe{
+    margin: 20px;
+  }
+  button, input, img, label, select, h2, nav,div.img-flow {
+    display: none !important;
+  }
+  div, div.d-flex, iframe, form{
+    display: inline !important;
   }
 }

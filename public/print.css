@@ -1,0 +1,10 @@
+@media print {
+    body.negative {
+        background-color: black !important;
+        -webkit-print-color-adjust: exact;
+    }
+    body.negative text, line {
+        fill: white !important;
+        stroke:white !important;
+    }
+}
