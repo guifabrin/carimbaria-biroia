@@ -84,7 +84,7 @@ export function Svg({ file, params, frameId }) {
           createPortal(
             <>
               {fontsHTML}
-              <link href={"/print.css"} type={"text/css"} rel={"stylesheet"} />
+              <link href={"./print.css"} type={"text/css"} rel={"stylesheet"} />
               <div
                 className="content"
                 dangerouslySetInnerHTML={{ __html: svgRender }}
