@@ -108,7 +108,7 @@ export default function C491N({
       <div className={"d-flex"}>
         <div className={"img-flow"}>
           <img
-            src={`/models/${suffix}_${
+            src={`./models/${suffix}_${
               models[model].image_index !== null
                 ? models[model].image_index
                 : model
